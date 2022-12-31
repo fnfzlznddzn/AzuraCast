@@ -44,6 +44,9 @@
                     <h5 class="now-playing-artist">
                         {{ np.now_playing.song.artist }}
                     </h5>
+                    <h5 class="now-playing-album">
+                        {{ np.now_playing.song.album }}
+                    </h5>
                 </div>
                 <div v-else>
                     <h4 class="now-playing-title">
