@@ -9,7 +9,7 @@ use Monolog\Logger;
 
 final class DuplicatePrevention
 {
-    public const ARTIST_SEPARATORS = [
+    /*public const ARTIST_SEPARATORS = [
         ', ',
         ' feat ',
         ' feat. ',
@@ -19,7 +19,7 @@ final class DuplicatePrevention
         ' & ',
         ' vs. ',
     ];
-
+*/
     public function __construct(
         protected Logger $logger
     ) {
@@ -65,18 +65,18 @@ final class DuplicatePrevention
         $validTrack = $this->getDistinctTrack($notPlayedEligibleTracks, $playedTracks);
         if (null !== $validTrack) {
             $this->logger->info(
-                'Found track that avoids duplicate title and artist.',
+                'Found track that avoids duplicate title.',
                 [
                     'media_id' => $validTrack->media_id,
                     'title' => $validTrack->title,
-                    'artist' => $validTrack->artist,
+                    //'artist' => $validTrack->artist,
                 ]
             );
 
             return $validTrack;
         }
 
-        // If we reach this point, there's no way to avoid a duplicate title and artist.
+        // If we reach this point, there's no way to avoid a duplicate title.
         if ($allowDuplicates) {
             /** @var Entity\Api\StationPlaylistQueue[] $mediaIdsByTimePlayed */
             $mediaIdsByTimePlayed = [];
@@ -95,11 +95,11 @@ final class DuplicatePrevention
             // Pull the lowest value, which corresponds to the least recently played song.
             if (null !== $validTrack) {
                 $this->logger->warning(
-                    'No way to avoid same title OR same artist; using least recently played song.',
+                    'No way to avoid same title; using least recently played song.',
                     [
                         'media_id' => $validTrack->media_id,
                         'title' => $validTrack->title,
-                        'artist' => $validTrack->artist,
+                        //'artist' => $validTrack->artist,
                     ]
                 );
 
@@ -125,15 +125,15 @@ final class DuplicatePrevention
         array $eligibleTracks,
         array $playedTracks
     ): ?Entity\Api\StationPlaylistQueue {
-        $artists = [];
+        //$artists = [];
         $titles = [];
         foreach ($playedTracks as $playedTrack) {
             $title = $this->prepareStringForMatching($playedTrack['title']);
             $titles[$title] = $title;
 
-            foreach ($this->getArtistParts($playedTrack['artist']) as $artist) {
+          /*  foreach ($this->getArtistParts($playedTrack['artist']) as $artist) {
                 $artists[$artist] = $artist;
-            }
+            }*/
         }
 
         foreach ($eligibleTracks as $track) {
@@ -143,7 +143,7 @@ final class DuplicatePrevention
                 continue;
             }
 
-            // Attempt to avoid an artist match, if possible.
+            /* Attempt to avoid an artist match, if possible.
             $compareArtists = [];
             foreach ($this->getArtistParts($track->artist) as $compareArtist) {
                 $compareArtists[$compareArtist] = $compareArtist;
@@ -151,13 +151,13 @@ final class DuplicatePrevention
 
             if (empty(array_intersect_key($compareArtists, $artists))) {
                 return $track;
-            }
+            }*/
         }
 
         return null;
     }
 
-    private function getArtistParts(string $artists): array
+  /*  private function getArtistParts(string $artists): array
     {
         $dividerString = chr(7);
 
@@ -172,7 +172,7 @@ final class DuplicatePrevention
                 $artistParts
             )
         );
-    }
+    }*/
 
     private function prepareStringForMatching(string $string): string
     {
