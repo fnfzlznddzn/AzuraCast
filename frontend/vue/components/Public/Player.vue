@@ -45,7 +45,7 @@
                         {{ np.now_playing.song.artist }}
                     </h5>
                     <h5 class="now-playing-album">
-                        {{ np.now_playing.song.album }}
+                        {{ np.now_playing.song.album }} ({{ np.now_playing.song.custom_fields.year }})
                     </h5>
                 </div>
                 <div v-else>
