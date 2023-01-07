@@ -92,12 +92,6 @@
     </b-modal>
 </template>
 
-<script>
-export default {
-    inheritAttrs: false
-}
-</script>
-
 <script setup>
 import CopyToClipboardButton from '~/components/Common/CopyToClipboardButton';
 import {computed, ref} from "vue";
@@ -149,6 +143,10 @@ const types = computed(() => {
 const themes = computed(() => {
     return [
         {
+            value: 'browser',
+            text: $gettext('Browser Default')
+        },
+        {
             value: 'light',
             text: $gettext('Light')
         },
@@ -180,7 +178,9 @@ const baseEmbedUrl = computed(() => {
 });
 
 const embedUrl = computed(() => {
-    return baseEmbedUrl.value + '?theme=' + selectedTheme.value;
+    return (selectedTheme.value !== "browser")
+        ? baseEmbedUrl.value + '?theme=' + selectedTheme.value
+        : baseEmbedUrl.value;
 });
 
 const embedHeight = computed(() => {

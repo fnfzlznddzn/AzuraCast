@@ -48,25 +48,31 @@
                     </tr>
                 </tbody>
             </table>
-            <div
-                v-if="userCanManageProfile"
-                class="card-actions"
-            >
+            <div class="card-actions">
                 <a
-                    class="btn btn-outline-danger"
+                    class="btn btn-outline-default"
                     @click.prevent="doOpenEmbed"
                 >
                     <icon icon="code" />
                     {{ $gettext('Embed Widgets') }}
                 </a>
-                <a
-                    class="btn btn-outline-danger"
-                    :data-confirm-title="$gettext('Disable public pages?')"
-                    :href="togglePublicPageUri"
-                >
-                    <icon icon="close" />
-                    {{ $gettext('Disable') }}
-                </a>
+                <template v-if="userCanManageProfile">
+                    <a
+                        class="btn btn-outline-default"
+                        :href="brandingUri"
+                    >
+                        <icon icon="design_services" />
+                        {{ $gettext('Edit Branding') }}
+                    </a>
+                    <a
+                        class="btn btn-outline-danger"
+                        :data-confirm-title="$gettext('Disable public pages?')"
+                        :href="togglePublicPageUri"
+                    >
+                        <icon icon="close" />
+                        {{ $gettext('Disable') }}
+                    </a>
+                </template>
             </div>
             <embed-modal
                 v-bind="$props"
@@ -96,12 +102,6 @@
         </template>
     </section>
 </template>
-
-<script>
-export default {
-    inheritAttrs: false
-};
-</script>
 
 <script setup>
 import Icon from '~/components/Common/Icon';
